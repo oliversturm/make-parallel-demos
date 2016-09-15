@@ -8,8 +8,12 @@ using System.Drawing;
 
 namespace Data.Mutable {
   abstract public class Element {
+    public Element() {
+      Source = this;
+    }
     public PointF Location { get; set; }
     public SizeF Size { get; set; }
     public int ZOrder { get; set; }
+    public Element Source { get; set; }
   }
 }

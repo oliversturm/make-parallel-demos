@@ -11,10 +11,12 @@ using System.Windows.Forms;
 using Data.Mutable;
 using System.Collections;
 
+using Rendering;
+
 namespace OliDTP {
   public class BorderGrabHandle : ElementSizeChangeActiveItem {
     public BorderGrabHandle(PresentationModel presentationModel,
-      Renderer.RenderInfo renderInfo,
+      RenderInfo renderInfo,
       System.Drawing.Rectangle selectionRectangle,
       BorderGrabHandleType borderGrabHandleType) :
       base(presentationModel, renderInfo, CalcGrabHandleRect(selectionRectangle, borderGrabHandleType)) {

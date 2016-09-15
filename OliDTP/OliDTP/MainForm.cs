@@ -43,7 +43,7 @@ namespace OliDTP {
 
     private void InitDocument( ) {
       document = new Document {
-        Size = new SizeF(8, 12),
+        Size = new SizeF(12, 12),
         Layers = new List<Layer> {
       		          new Layer {
                       Name = "Layer 1",
@@ -77,10 +77,28 @@ namespace OliDTP {
                           Size = new SizeF(2.5f, 1.5f),
                           ZOrder = -1,
                           Filename=@"..\..\..\images\postbox.jpg"
+                        },
+                        new Data.Mutable.BitmapImage{
+                          Location = new PointF(3.5f, 2.5f),
+                          Size = new SizeF(2.5f, 1.5f),
+                          ZOrder = 1,
+                          Filename=@"..\..\..\images\beef1.jpg"
+                        },
+                        new Data.Mutable.BitmapImage{
+                          Location = new PointF(3.5f, 1.5f),
+                          Size = new SizeF(3.5f, 1.5f),
+                          ZOrder = 2,
+                          Filename=@"..\..\..\images\defender.jpg"
+                        },
+                        new Data.Mutable.BitmapImage{
+                          Location = new PointF(1.5f, 3.5f),
+                          Size = new SizeF(4.5f, 1f),
+                          ZOrder = 3,
+                          Filename=@"..\..\..\images\island.jpg"
                         }
 
-      		            }
-      		          }
+                      }
+                    }
       		        }
       };
     }

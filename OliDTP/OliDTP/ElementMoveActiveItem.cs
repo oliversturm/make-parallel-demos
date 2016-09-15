@@ -11,14 +11,17 @@ using System.Windows.Forms;
 using Data.Mutable;
 using System.Collections;
 
+using Rendering;
+
+
 namespace OliDTP {
   public class ElementMoveActiveItem : GrabHandleActiveItem {
-    public ElementMoveActiveItem(PresentationModel presentationModel, Renderer.RenderInfo renderInfo)
+    public ElementMoveActiveItem(PresentationModel presentationModel, RenderInfo renderInfo)
       : base(presentationModel, System.Drawing.Rectangle.Inflate(renderInfo.Rect, -2, -2)) {
       this.renderInfo = renderInfo;
     }
 
-    private Renderer.RenderInfo renderInfo;
+    private RenderInfo renderInfo;
 
     public override bool NotifyLeftMouseButtonClicked( ) {
       return false;

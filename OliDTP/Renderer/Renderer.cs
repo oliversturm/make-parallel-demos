@@ -8,7 +8,7 @@ using Microsoft.FSharp.Collections;
 using System.Drawing;
 using System.Collections.Immutable;
 
-namespace Renderer {
+namespace Rendering {
   public class RenderInfo {
     public RenderInfo(Layer layer, Element element, Rectangle rect) {
       Layer = layer;
@@ -20,7 +20,6 @@ namespace Renderer {
     public Rectangle Rect { get; }
   }
   public class Renderer {
-
     public (Bitmap bm, ImmutableList<RenderInfo> ril) 
       Render(Data.Mutable.Document doc, float dpix, float dpiy) {
       var cdoc = Clone(doc);
@@ -36,6 +35,8 @@ namespace Renderer {
           doc.Layers.
             Where(l => l.Visible).
             OrderBy(l => l.ZOrder).
+            // Layer rendering can now happen in parallel:
+            //AsParallel().
             Select(l => RenderLayer(l, doc, dpix, dpiy)).
             Aggregate(ImmutableList<RenderInfo>.Empty,
             (cril, ld) => {

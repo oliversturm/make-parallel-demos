@@ -1,16 +1,14 @@
 // Copyright 2010 Oliver Sturm <oliver@oliversturm.com> All rights reserved. 
 
+using Data.Mutable;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using Data.Mutable;
-using System.Collections;
-using System.Drawing.Drawing2D;
+
+using Rendering;
 
 namespace OliDTP {
   // This class holds references to information about the rendering input and output.
@@ -28,10 +26,10 @@ namespace OliDTP {
       this.viewContainerWidth = viewContainerWidth;
       this.viewContainerHeight = viewContainerHeight;
 
-      this.activeItems = new List<ActiveItem>( );
+      this.activeItems = new List<ActiveItem>();
       this.selection = new Selection(this, activeItems);
 
-      UpdateRenderImage( );
+      UpdateRenderImage();
     }
 
     #region Input properties
@@ -41,7 +39,7 @@ namespace OliDTP {
       set {
         if (!object.ReferenceEquals(document, value)) {
           document = value;
-          UpdateRenderImage( );
+          UpdateRenderImage();
         }
       }
     }
@@ -52,7 +50,7 @@ namespace OliDTP {
       set {
         if (zoomMode != value) {
           zoomMode = value;
-          UpdateRenderImage( );
+          UpdateRenderImage();
         }
       }
     }
@@ -63,7 +61,7 @@ namespace OliDTP {
       set {
         if (zoomPercentage != value) {
           zoomPercentage = value;
-          UpdateRenderImage( );
+          UpdateRenderImage();
         }
       }
     }
@@ -75,7 +73,7 @@ namespace OliDTP {
         if (viewContainerWidth != value) {
           viewContainerWidth = value;
           if (zoomMode != OliDTP.ZoomMode.Percentage)
-            UpdateRenderImage( );
+            UpdateRenderImage();
         }
       }
     }
@@ -87,13 +85,13 @@ namespace OliDTP {
         if (viewContainerHeight != value) {
           viewContainerHeight = value;
           if (zoomMode != OliDTP.ZoomMode.Percentage)
-            UpdateRenderImage( );
+            UpdateRenderImage();
         }
       }
     }
 
-    public void NotifyDocumentChanged( ) {
-      UpdateRenderImage( );
+    public void NotifyDocumentChanged() {
+      UpdateRenderImage();
     }
 
     #endregion
@@ -121,7 +119,7 @@ namespace OliDTP {
     #endregion
 
     #region Bitmap calculation and update
-    private void CalcDPI( ) {
+    private void CalcDPI() {
       switch (zoomMode) {
         case ZoomMode.WholePage:
           dPIX = dPIY = Math.Min(
@@ -130,7 +128,7 @@ namespace OliDTP {
           break;
 
         case ZoomMode.Percentage:
-          var dpi = WinAPIHelpers.GetScreenDPI( );
+          var dpi = WinAPIHelpers.GetScreenDPI();
           dPIX = dpi.Width * zoomPercentage / 100.0f;
           dPIY = dpi.Height * zoomPercentage / 100.0f;
           break;
@@ -146,45 +144,43 @@ namespace OliDTP {
       }
     }
 
-    List<Renderer.RenderInfo> renderInfo;
+    List<RenderInfo> renderInfo;
     Bitmap renderImage;
 
-    public void UpdateRenderImage( ) {
+    public void UpdateRenderImage() {
       if (updateLock == 0) {
-        CalcDPI( );
-        var renderer = new Renderer.Renderer();
+        CalcDPI();
+        var renderer = new Renderer();
         var renderResult = renderer.Render(document, dPIX, dPIY);
         if (renderImage != null) {
-          renderImage.Dispose( );
+          renderImage.Dispose();
           renderImage = null;
         }
         renderImage = renderResult.Item1;
-        renderInfo = new List<Renderer.RenderInfo>(renderResult.Item2);
+        renderInfo = new List<RenderInfo>(renderResult.Item2);
         selection.UpdateSelectionFromRenderInfo(renderInfo);
-        UpdateAdornments( );
+        UpdateAdornments();
       }
     }
 
-    private void UpdateAdornments( ) {
+    private void UpdateAdornments() {
       if (updateLock == 0) {
         if (bitmap != null) {
-          bitmap.Dispose( );
+          bitmap.Dispose();
           bitmap = null;
         }
 
         bitmap = new Bitmap(renderImage);
-        using (var bgr = Graphics.FromImage(bitmap)) {
-          using (var adornmentImage = new Bitmap(bitmap.Width, bitmap.Height)) {
-            using (var agr = Graphics.FromImage(adornmentImage)) {
-              selection.DrawSelections(agr);
-              DrawActiveItems(agr);
-            }
-
-            bgr.DrawImageUnscaled(adornmentImage, 0, 0);
+        using (var bgr = Graphics.FromImage(bitmap)) using (var adornmentImage = new Bitmap(bitmap.Width, bitmap.Height)) {
+          using (var agr = Graphics.FromImage(adornmentImage)) {
+            selection.DrawSelections(agr);
+            DrawActiveItems(agr);
           }
+
+          bgr.DrawImageUnscaled(adornmentImage, 0, 0);
         }
 
-        OnBitmapChanged( );
+        OnBitmapChanged();
       }
     }
 
@@ -195,7 +191,7 @@ namespace OliDTP {
 
     public event EventHandler BitmapChanged;
 
-    protected virtual void OnBitmapChanged( ) {
+    protected virtual void OnBitmapChanged() {
       if (BitmapChanged != null)
         BitmapChanged(this, EventArgs.Empty);
     }
@@ -204,14 +200,14 @@ namespace OliDTP {
     #region Update locking
     int updateLock = 0;
 
-    public void SuspendUpdate( ) {
+    public void SuspendUpdate() {
       updateLock++;
     }
 
     public void ResumeUpdate(bool triggerUpdate) {
       updateLock--;
       if (triggerUpdate && updateLock == 0)
-        UpdateRenderImage( );
+        UpdateRenderImage();
     }
     #endregion
 
@@ -222,24 +218,20 @@ namespace OliDTP {
 
       var relevantActiveItems =
         activeItems.Where(ai => ai.Rectangle.Contains(x, y));
-      foreach (var activeItem in relevantActiveItems) {
-        if (activeItem.NotifyLeftMouseButtonClicked( ))
+      foreach (var activeItem in relevantActiveItems) if (activeItem.NotifyLeftMouseButtonClicked())
           return;
-      }
 
       var oldSelection = selection.SelectedRenderInfo;
       selection.NotifyLeftMouseButtonClicked(x, y, renderInfo);
       if (!object.ReferenceEquals(oldSelection, selection.SelectedRenderInfo))
-        UpdateAdornments( );
+        UpdateAdornments();
     }
     #endregion
 
 
     #region Mousing stuff
     public Cursor CalcMouseCursor(int x, int y) {
-      if (dragStarted) {
-        return dragItem.MouseCursor;
-      }
+      if (dragStarted) return dragItem.MouseCursor;
       else {
         var activeItemUnderMouse =
           activeItems.FirstOrDefault(ai => ai.Rectangle.Contains(x, y));
@@ -258,7 +250,7 @@ namespace OliDTP {
         if (item.NotifyLeftMouseDragStart(x, y)) {
           dragItem = item;
           dragStarted = true;
-          UpdateAdornments( );
+          UpdateAdornments();
           return true;
         }
       return false;
@@ -266,7 +258,7 @@ namespace OliDTP {
 
     public bool NotifyLeftMouseDragMove(int x, int y) {
       var result = dragItem.NotifyLeftMouseDragMove(x, y);
-      UpdateAdornments( );
+      UpdateAdornments();
       return result;
     }
 
@@ -276,9 +268,9 @@ namespace OliDTP {
       dragStarted = false;
       dragItem = null;
       if (updateRequired)
-        UpdateRenderImage( );
+        UpdateRenderImage();
       else
-        UpdateAdornments( );
+        UpdateAdornments();
     }
 
     #endregion
@@ -294,19 +286,16 @@ namespace OliDTP {
         else
           return null;
       }
-      set
-      {
-      	if (activeLayer != value)
-          activeLayer= value;
+      set {
+        if (activeLayer != value)
+          activeLayer = value;
       }
     }
 
     public void SetLayerVisibility(Layer layer, bool visible) {
       if (layer.Visible != visible) {
-        lock (document.Lock) {
-          layer.Visible = visible;
-        }
-        UpdateRenderImage( );
+        lock (document.Lock) layer.Visible = visible;
+        UpdateRenderImage();
       }
     }
     #endregion
@@ -314,10 +303,8 @@ namespace OliDTP {
     #region Document modifications
     public void AddDocumentElement(Layer layer, Element element) {
       if (layer != null) {
-        lock (document.Lock) {
-          layer.Elements.Add(element);
-        }
-        UpdateRenderImage( );
+        lock (document.Lock) layer.Elements.Add(element);
+        UpdateRenderImage();
       }
     }
 

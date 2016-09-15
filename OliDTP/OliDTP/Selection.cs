@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using Data.Mutable;
 using System.Collections;
 
+using Rendering;
+
 namespace OliDTP {
   public class Selection {
     // Currently just one selected item supported - it's just a demo :-)
@@ -23,8 +25,8 @@ namespace OliDTP {
     PresentationModel presentationModel;
     IList<ActiveItem> activeItems;
 
-    Renderer.RenderInfo selectedRenderInfo;
-    public Renderer.RenderInfo SelectedRenderInfo {
+    RenderInfo selectedRenderInfo;
+    public RenderInfo SelectedRenderInfo {
       get { return selectedRenderInfo; }
     }
     public bool HasSelection {
@@ -33,7 +35,7 @@ namespace OliDTP {
     
     System.Drawing.Rectangle selectionRectangle;
 
-    public void SetSelection(Renderer.RenderInfo newSelection) {
+    public void SetSelection(RenderInfo newSelection) {
       selectedRenderInfo = newSelection;
       if (selectedRenderInfo != null)
         selectionRectangle = System.Drawing.Rectangle.Inflate(selectedRenderInfo.Rect, 2, 2);
@@ -42,7 +44,7 @@ namespace OliDTP {
       UpdateSelectionGrabHandles( );
     }
 
-    public void UpdateSelectionFromRenderInfo(IEnumerable<Renderer.RenderInfo> renderInfo) {
+    public void UpdateSelectionFromRenderInfo(IEnumerable<RenderInfo> renderInfo) {
       // This is called when the renderinfo has changed because the image has been
       // rerendered. In that case I need to find the new renderInfo that relates
       // to the object that was previously selected.
@@ -94,7 +96,7 @@ namespace OliDTP {
       }
     }
 
-    public void NotifyLeftMouseButtonClicked(int x, int y, List<Renderer.RenderInfo> renderInfo) {
+    public void NotifyLeftMouseButtonClicked(int x, int y, List<RenderInfo> renderInfo) {
       var containingItems =
         (from ri in renderInfo
          where ri.Rect.Contains(x, y)

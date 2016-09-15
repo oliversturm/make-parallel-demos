@@ -11,15 +11,17 @@ using System.Windows.Forms;
 using Data.Mutable;
 using System.Collections;
 
+using Rendering;
+
 namespace OliDTP {
   public abstract class ElementSizeChangeActiveItem : GrabHandleActiveItem {
-    public ElementSizeChangeActiveItem(PresentationModel presentationModel, Renderer.RenderInfo renderInfo, System.Drawing.Rectangle rectangle)
+    public ElementSizeChangeActiveItem(PresentationModel presentationModel, RenderInfo renderInfo, System.Drawing.Rectangle rectangle)
       : base(presentationModel, rectangle) {
       this.renderInfo = renderInfo;
     }
 
-    private Renderer.RenderInfo renderInfo;
-    public Renderer.RenderInfo RenderInfo {
+    private RenderInfo renderInfo;
+    public RenderInfo RenderInfo {
       get { return renderInfo; }
     }
 

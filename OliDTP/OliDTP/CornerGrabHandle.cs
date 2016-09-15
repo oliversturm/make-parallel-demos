@@ -11,10 +11,12 @@ using System.Windows.Forms;
 using Data.Mutable;
 using System.Collections;
 
+using Rendering;
+
 namespace OliDTP {
   public class CornerGrabHandle : ElementSizeChangeActiveItem {
     public CornerGrabHandle(PresentationModel presentationModel,
-      Renderer.RenderInfo renderInfo,
+      RenderInfo renderInfo,
       System.Drawing.Rectangle selectionRectangle,
       CornerGrabHandleType cornerGrabHandleType) :
       base(presentationModel, renderInfo, CalcGrabHandleRect(selectionRectangle, cornerGrabHandleType)) {

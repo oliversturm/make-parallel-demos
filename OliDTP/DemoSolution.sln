@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensibility.Python", "Ext
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Renderer", "Renderer\Renderer.csproj", "{643DC96D-2D03-41DE-85D4-B6BC2AF5F35C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinearRenderer", "LinearRenderer\LinearRenderer.csproj", "{082CE386-8F86-43B6-86CD-CD0E6BEFF467}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,18 @@ Global
 		{643DC96D-2D03-41DE-85D4-B6BC2AF5F35C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{643DC96D-2D03-41DE-85D4-B6BC2AF5F35C}.Release|x86.ActiveCfg = Release|Any CPU
 		{643DC96D-2D03-41DE-85D4-B6BC2AF5F35C}.Release|x86.Build.0 = Release|Any CPU
+		{082CE386-8F86-43B6-86CD-CD0E6BEFF467}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{082CE386-8F86-43B6-86CD-CD0E6BEFF467}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{082CE386-8F86-43B6-86CD-CD0E6BEFF467}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{082CE386-8F86-43B6-86CD-CD0E6BEFF467}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{082CE386-8F86-43B6-86CD-CD0E6BEFF467}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{082CE386-8F86-43B6-86CD-CD0E6BEFF467}.Debug|x86.Build.0 = Debug|Any CPU
+		{082CE386-8F86-43B6-86CD-CD0E6BEFF467}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{082CE386-8F86-43B6-86CD-CD0E6BEFF467}.Release|Any CPU.Build.0 = Release|Any CPU
+		{082CE386-8F86-43B6-86CD-CD0E6BEFF467}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{082CE386-8F86-43B6-86CD-CD0E6BEFF467}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{082CE386-8F86-43B6-86CD-CD0E6BEFF467}.Release|x86.ActiveCfg = Release|Any CPU
+		{082CE386-8F86-43B6-86CD-CD0E6BEFF467}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
