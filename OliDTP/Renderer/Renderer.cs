@@ -38,6 +38,11 @@ namespace Rendering {
             // Layer rendering can now happen in parallel:
             //AsParallel().
             Select(l => RenderLayer(l, doc, dpix, dpiy)).
+            // Recommendation: convert the sequence back to a non-parallel one explicitly
+            // at this point. As it is, Aggregate below will not be parallelized anyway,
+            // but since we explicitly don't want it to parallelize, it seems a good
+            // idea to indicate this clearly.
+            //AsEnumerable().
             Aggregate(ImmutableList<RenderInfo>.Empty,
             (cril, ld) => {
               gr.DrawImage(ld.bm, 0, 0);

@@ -123,9 +123,9 @@
       <Project>{2182E29C-DDDD-425F-891A-67ADA9350F49}</Project>
       <Name>Extensibility</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Renderer\Renderer.csproj">
-      <Project>{643dc96d-2d03-41de-85d4-b6bc2af5f35c}</Project>
-      <Name>Renderer</Name>
+    <ProjectReference Include="..\LinearRenderer\LinearRenderer.csproj">
+      <Project>{082ce386-8f86-43b6-86cd-cd0e6beff467}</Project>
+      <Name>LinearRenderer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
