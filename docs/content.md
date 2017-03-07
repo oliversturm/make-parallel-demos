@@ -235,6 +235,8 @@ Demo source code: https://github.com/oliversturm/make-parallel-demos
 
 This presentation: https://oliversturm.github.io/make-parallel-demos
 
+* Deprettified content in pdf format: https://oliversturm.github.io/cs-state-of-the-nation/slidecontent.pdf
+
 ---
 
 ## Thank You
