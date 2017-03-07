@@ -8,8 +8,8 @@ function preprocessMd() {
     var splitter = split();
     var replacer = through(function(d) {
 	this.queue(
-	    d.replace(/^\^/, "<pagebreak>").
-		replace(/^---/, "<pagebreak>") + "\n");
+	    d.replace(/^\^$/, "<pagebreak>").
+		replace(/^---$/, "<pagebreak>") + "\n");
     });
     splitter.pipe(replacer);
     return duplexer(splitter, replacer);
